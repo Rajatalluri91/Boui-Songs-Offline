@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+
+<html dir="ltr" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto&amp;display=swap" rel="stylesheet"/>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+<title>MP3 Player</title>
+<link href="style.css" media="all" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Telugu&amp;display=swap" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/> <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@421&amp;family=Mallanna&amp;family=Mandali&amp;display=swap" rel="stylesheet"/>
+
+<link rel="manifest" href="manifest.json">
+
+</head>
+<style>
+      
+  body{
+  
+  align-items: center;
+  justify-content: center;
+  
+  background-image: linear-gradient(to bottom left, #041f31, black);
+  user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+   height: 100%; /* Ensure enough content for scrolling */
+   
+   background-size: 100% 100%;
+   
+   
+}
+
+
+
+#myProgress {
+  width: 90%;
+   background-color: #d9d9f2; 
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+
+
+#myBar {
+  width: 0%;
+  height: 5px;
+  background-color: #ffc266;
+  border-radius: 10px;
+}
+
+.logo {
+  fill: red;
+}
+
+.btn-action{
+  cursor: pointer;
+  padding-top:0;
+  width: 70px;
+  
+  }
+
+.btn-ctn, .infos-ctn{
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  margin-top:0;
+  
+}
+.infos-ctn{
+padding-top:10px;
+font-family: 'Anek Telugu', sans-serif;
+}
+
+.btn-ctn > div {
+ padding-top: 10px;
+ padding-left: 10px;
+ padding-right: 0px;
+ left: 0;
+ margin-top:5px;
+ margin-bottom:0px;
+ 
+}
+
+.infos-ctn > div {
+ margin-bottom: 8px;
+ color: white;
+}
+
+.first-btn{
+  margin-left: 3px;
+  
+}
+
+.duration{
+  margin-left: 10px;
+}
+
+.title{
+  margin-left: 10px;
+  width: 180px;
+  text-align: center;
+  justify-content: center;
+  
+}
+
+
+
+
+
+.player-ctn{
+  
+  width:100%;
+  
+  color:#ffc266;
+  margin-bottom:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:fixed;
+  bottom:0px;
+ 
+  left: 0;
+ height: 100px;
+ background-image: linear-gradient(to bottom left, #041f31, black);
+ 
+}
+
+
+
+
+
+
+.playlist-track-ctn {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  margin-top: 5px;         /* ⬅️ Reduced gap between items */
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px;        /* ⬅️ Reduced vertical spacing inside item */
+  column-gap: 10px;
+ 
+}
+
+
+   
+.playlist-track-ctn:last-child{
+  /*border: 1px solid #ffc266; */
+  
+}
+
+
+.playlist-info-track{
+  width: 80%;
+}
+
+
+.playlist-info-track,.playlist-duration{
+  padding-top: 8px;
+  padding-bottom:0px;
+  color: white;
+  font-size:18px;
+  pointer-events: none;
+  margin-right:10px;
+}
+
+
+.active-track{
+  background:black;
+  color: white !important;
+  font-weight:bold;
+  -webkit-tap-highlight-color:#141727cf;
+  
+}
+
+
+.active-track > .playlist-info-track,.active-track >.playlist-duration,.active-track > .playlist-btn-play{
+  color: #ffc266 !important;
+}
+
+
+.playlist-btn-play{
+  pointer-events: none;
+  padding-top: 8px;
+  padding-bottom:0;
+  padding-right:10px;
+}
+.fas{
+  color:#ffc266;
+  font-size: 16px;
+  padding-top: 0px;
+
+  
+  
+}  
+.playlist-ctn{
+	font-size:15px;
+	color:#ffc266;
+	font-family: 'Anek Telugu', sans-serif;
+	margin-bottom:100px;
+	margin-top: 10px;
+	height:100%;
+	
+
+   }   
+  
+     .zoom-out {
+  width: 75%;
+  height: 200px; /* fixed height instead of aspect-ratio */
+  background-image: url('https://i.pinimg.com/736x/49/9f/18/499f18cfad6f432a664ffec99ed01790.jpg');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 25px;
+  margin: auto;
+  
+}
+
+    .zoom-out.scroll {
+      transform: scale(0.5);
+      opacity: 0.1;
+    }
+	
+	.playlist-track-ctn i.fa-scroll {
+  color: #ffc266;
+  padding-top: 10px;
+}
+
+.lyrics-box {
+        display: none;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        border-radius: 8px;
+        white-space: pre-line;
+        font-family: 'Mandali', sans-serif;
+        font-size: 20px;
+        margin: 5px 10px 10px 2px;
+        color:#ffc266;
+        width:88%;
+        padding-left:30px;
+      }
+
+input#searchBox {
+        width: 90%;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 0 auto;
+        display: block;
+        font-family: 'Mandali', sans-serif;
+        font-size:16px;
+        position : fixed ;
+        color: white ;
+         background-image: linear-gradient(to bottom left, #041f31, black);
+      }
+      
+    
+#searchMask {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px; /* adjust based on searchBox height */
+  background: linear-gradient(to bottom, rgba(4, 31, 49, 1), rgba(4, 31, 49, 0.8));
+  z-index: 1;
+}
+
+input#searchBox {
+  position: fixed;
+  top: 10px;
+  z-index: 2; /* Make sure input stays on top */
+}
+.custom-download-icon {
+  color: #ffc266 !important;
+  font-size: 16px;
+}
+
+
+  </style>
+<body>
+<div id="searchMask"></div>
+<i class="fas fa-download custom-download-icon"></i>
+<input id="searchBox" placeholder="పాట కోసం శోధించండి..." type="text"/>
+<br/><br/><br/><br/>
+<div class="zoom-out"></div>
+<script>
+    window.addEventListener('scroll', function() {
+      var scrollPosition = window.scrollY;
+      var zoomOutElement = document.querySelector('.zoom-out');
+
+      if (scrollPosition > 150) { // Adjust the scroll position where the effect starts
+        zoomOutElement.classList.add('scroll');
+      } else {
+        zoomOutElement.classList.remove('scroll');
+      }
+    });
+  </script>
+<audio id="myAudio" ontimeupdate="onTimeUpdate()">
+<!-- <source src="audio.ogg" type="audio/ogg"> -->
+<source id="source-audio" src="" type="audio/mpeg"/>
+  Your browser does not support the audio element.
+</audio>
+<div class="playlist-ctn"></div>
+<div class="player-ctn">
+<div class="infos-ctn">
+<div class="timer">00:00</div>
+<div class="title"></div>
+<div class="duration">00:00</div>
+<div class="Artist"></div>
+</div>
+<div id="myProgress">
+<div id="myBar"></div>
+</div>
+<div class="btn-ctn">
+<div class="btn-action first-btn" onclick="previous()">
+<div id="btn-faws-back">
+<i class="fas fa-step-backward"></i>
+</div>
+</div>
+<div class="btn-action" onclick="toggleAudio()">
+<div id="btn-faws-play-pause">
+<i class="fas fa-play" id="icon-play"></i>
+<i class="fas fa-pause" id="icon-pause" style="display: none"></i>
+</div>
+</div>
+<div class="btn-action" onclick="next()">
+<div id="btn-faws-next">
+<i class="fas fa-step-forward"></i>
+</div>
+</div>
+<div class="btn-mute" id="toggleMute" onclick="toggleMute()">
+<div id="btn-faws-volume">
+<i class="fas fa-volume-up" id="icon-vol-up"></i>
+<i class="fas fa-volume-mute" id="icon-vol-mute" style="display: none"></i>
+</div>
+</div>
+</div>
+</div>
+<script>
+ document.getElementById('searchBox').addEventListener('input', function(e) {
+  const term = e.target.value.toLowerCase();
+  document.querySelectorAll('.playlist-track-ctn').forEach((track, index) => {
+    const title = listAudio[index].name.toLowerCase();
+    track.style.display = title.includes(term) ? 'flex' : 'none';
+  });
+}); 
+
+function createTrackItem(index, name, duration) {
+  const trackItem = document.createElement('div');
+  trackItem.className = 'playlist-track-ctn';
+  trackItem.id = 'ptc-' + index;
+  trackItem.dataset.index = index;
+
+  // ▶️ Play Button
+  const playBtn = document.createElement('div');
+  playBtn.className = 'playlist-btn-play';
+  playBtn.innerHTML = `<i class="fas fa-play" id="p-img-${index}"></i>`;
+
+  // 🎵 Song Info
+  const info = document.createElement('div');
+  info.className = 'playlist-info-track';
+  info.textContent = name;
+
+  // ⏱ Duration
+  const dur = document.createElement('div');
+  dur.className = 'playlist-duration';
+  dur.textContent = duration;
+
+  // 📖 Lyrics Icon
+  const lyricsIcon = document.createElement('div');
+  lyricsIcon.innerHTML = `<i class="fas fa-book-open"></i>`;
+  lyricsIcon.style.cursor = 'pointer';
+  lyricsIcon.onclick = function () {
+  const lBox = document.getElementById('lyrics-' + index);
+  const isVisible = lBox.style.display === 'block';
+
+  // మొదట అన్ని lyrics-boxల్ని hide చేయండి
+  document.querySelectorAll('.lyrics-box').forEach(box => {
+    box.style.display = 'none';
+  });
+
+  // ఇప్పుడు మాత్రమే toggle చేయండి
+  lBox.style.display = isVisible ? 'none' : 'block';
+};
+
+
+  // ⬇️ Download Icon
+  const downloadIcon = document.createElement('div');
+  downloadIcon.style.cursor = 'pointer';
+  downloadIcon.innerHTML = `
+  <a href="${listAudio[index].file}" download title="Download Song">
+    <i class="fas fa-download" style="color: #ffc266; font-size: 16px;"></i>
+  </a>
+`;
+
+
+  // ✅ Add all to track
+  trackItem.appendChild(playBtn);
+  trackItem.appendChild(info);
+  trackItem.appendChild(dur);
+  trackItem.appendChild(lyricsIcon);
+  trackItem.appendChild(downloadIcon);
+
+  // 🧾 Lyrics Box
+  const lyricsDiv = document.createElement('div');
+  lyricsDiv.className = 'lyrics-box';
+  lyricsDiv.id = 'lyrics-' + index;
+  lyricsDiv.style.display = 'none';
+
+  const lyricsText = document.createElement('div');
+  lyricsText.textContent = 'Lyrics loading...';
+  lyricsDiv.appendChild(lyricsText);
+
+  // 📜 Add track and lyrics to playlist
+  document.querySelector('.playlist-ctn').appendChild(trackItem);
+  document.querySelector('.playlist-ctn').appendChild(lyricsDiv);
+
+  // 🎤 Load lyrics
+  if (listAudio[index].lyricsUrl) {
+    fetch(listAudio[index].lyricsUrl)
+      .then(res => res.text())
+      .then(text => {
+        lyricsText.textContent = text;
+      })
+      .catch(err => {
+        lyricsText.textContent = "Lyrics unavailable.";
+      });
+  } else {
+    lyricsText.textContent = listAudio[index].lyrics || "Lyrics unavailable...";
+  }
+}
+
+
+
+
+  
+
+var listAudio = [
+  {
+    name:"01. సమాధినే గెలిచాడు",
+    file:"https://raw.githubusercontent.com/Rajatalluri91/Boui-Sogns/main/01.%20Samadhine.mp3",
+    duration:"05:02",
+    lyricsUrl: "https://raw.githubusercontent.com/Rajatalluri91/Lyrics/main/Samadhine.txt"
+  },
+  {
+      name:"02. కట్టెలపై నీ శరీరం ",
+     file:"https://music.wixstatic.com/preview/f4beae_fdb38790f6ff49689d03cc0c1bf85b97-128.mp3",
+      duration:"05:26",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/52406fab32a3e57121fc35bf5c1eb0e8/raw/dc39291276eb577f663504dd5540fe61688c8963/Kattelapai.txt"
+    },
+    
+      {
+      name:"03. రాజాధి రాజుడు ",
+     file:"https://music.wixstatic.com/preview/f4beae_2008f3853d404030ac6d1191f38bcde9-128.mp3",
+      duration:"04:44",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/ca809b2dcc6a676d21f47b326cf5a15f2ebef803/3.Rajadhi%2520Rajudu.txt"
+    },
+    
+      {
+      name:"04. మానవుడా కారణ  ",
+     file:"https://music.wixstatic.com/preview/f4beae_3edddf7761fb4b6da130e09a34447a32-128.mp3",
+      duration:"05:06",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/987c8a9759e2d30d28ab5828ee05a5f89771c4f8/4.Manavuda.txt"
+    },  
+      {
+      name:"05. సకల శాస్త్రాలను ",
+     file:"https://music.wixstatic.com/preview/f4beae_a4ba5e067fe24624866a4d6a1527f33b-128.mp3",
+      duration:"04:35",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/987c8a9759e2d30d28ab5828ee05a5f89771c4f8/5.Sakala%2520Sastralanu.txt "
+      
+    },  
+    {
+      name:"06. సమసమాజ స్థాపనకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_4754a4897cee4a1589db243c05e6479e-128.mp3",
+      duration:"05:13",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/987c8a9759e2d30d28ab5828ee05a5f89771c4f8/6.Samasamaja.txt "
+      
+    },
+    
+{
+      name:"07. పువ్వుకింత పరిమళమా ",
+     file:"https://music.wixstatic.com/preview/f4beae_81cecfc41fba4a229ee678b8e5c1846a-128.mp3",
+      duration:"05:23",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/987c8a9759e2d30d28ab5828ee05a5f89771c4f8/7.Puvvukintha.txt "
+      
+    },
+    
+{
+      name:"08. దేవుడెవరు? ",
+     file:"https://music.wixstatic.com/preview/f4beae_a42641112556421f91c0e725f8469529-128.mp3",
+      duration:"03:54",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/987c8a9759e2d30d28ab5828ee05a5f89771c4f8/8.Devudevaru.txt "
+      
+    },
+    
+ {
+      name:"09. శాస్తానికందని ",
+     file:"https://music.wixstatic.com/preview/f4beae_930f45f57a1046bb82916f95ff4005a5-128.mp3",
+      duration:"06:59",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/9.Sastranikandani.txt"
+      
+    },
+    
+   {
+      name:"10. రక్షకుడే శిక్షకుడై ",
+     file:"https://music.wixstatic.com/preview/f4beae_4e5fa8e050ae42bc9160d814920bb34b-128.mp3",
+      duration:"04:57",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/10.Rakshakude.txt "
+      
+    },
+      {
+      name:"11. దేవుడు నీకు తెలుసు ",
+     file:"https://music.wixstatic.com/preview/f4beae_f09efc08405243e0a3ce6865b53ec029-128.mp3",
+      duration:"04:42",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/11.Devudu%2520Neeku.txt"
+    },
+    {
+      name:"12. బ్రతికి చస్తావా ",
+     file:"https://music.wixstatic.com/preview/f4beae_45adc1d1e4ef49178137c9e1c267134c-128.mp3",
+      duration:"06:27",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/12.Brathiki.txt"
+      },
+    {
+      name:"13. జోస్యం మాటే ",
+     file:"https://music.wixstatic.com/preview/f4beae_ef1d4744503543d4990ace69ccfb5857-128.mp3",
+      duration:"04:55",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/13.Josyam.txt"
+      
+    },
+    {
+      name:"14. దయ్యమా? దైవమా? ",
+     file:"https://music.wixstatic.com/preview/f4beae_505502354a834fb0b5c2aeab3e6482c5-128.mp3",
+      duration:"07:58",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/14.Deyyama.txt" 
+    },
+    {
+      name:"15. ఎవరెవరి కొరకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_7e2121c836d14b42829d55ee6a581af9-128.mp3",
+      duration:"03:52",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/f98d5cd808dbbe4c4fcb2daaebfbcc9e/raw/0eb147e36ee7b775e4831442e56b7061b06c2fa3/15.Evarevari.txt"      
+    },
+    
+       {
+      name:"16.  ఆదియందు దేవుడు ",
+     file:"",
+      duration:"04:43",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/8a63949ed4fa4e17a51333582afd3e94ab8eaece/16.Adhiyandu.txt"      
+    },
+    {
+      name:"17. మనిషీ ఓ మనిషీ ",
+     file:"https://music.wixstatic.com/preview/f4beae_3acb3ebfe5604d8aacd6400c071f9732-128.mp3",
+      duration:"05:13",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/17.Manishi.txt "
+      
+    },
+    
+    {
+      name:"18. సామాన్యుని నుండి ",
+     file:"https://music.wixstatic.com/preview/f4beae_d9448958fe5e4254acbf3cfbef904f8e-128.mp3",
+      duration:"04:24",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/18.Samanyuni.txt "
+      
+    },
+    
+    {
+      name:"19. బ్రతుకు బండికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_a36431c347ed432288bcd26c1626a69b-128.mp3",
+      duration:"05:23",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/19.Brathukubandi.txt "
+      
+    },
+    {
+      name:"20. మనిషికి జన్మ పాపము",
+     file:"https://music.wixstatic.com/preview/f4beae_74bd2f3386a14979802bb7ceb8dcaa50-128.mp3",
+      duration:"05:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/20.Manishiki%2520Janma.txt"
+      
+    },
+    {
+      name:"21. క్రీస్తు విరోధులపై ",
+     file:"https://music.wixstatic.com/preview/f4beae_882559d96cfa461784c55759d5dc8fa7-128.mp3",
+      duration:"04:14",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/21.Kreesthu.txt "
+      
+    },
+    {
+      name:"22. కనులు తెరువుమా ",
+     file:"https://music.wixstatic.com/preview/f4beae_504682bbd75643498406b5912fe22041-128.mp3",
+      duration:"05:38",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/22.Kanulu.txt"
+      
+    },
+    {
+      name:"23. గర్భ ఫలము ",
+     file:"https://music.wixstatic.com/preview/f4beae_39d3f22788144c3eb396ffae2f9f253b-128.mp3",
+      duration:"06:17",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/59d8602e3c99536170169507832154b4/raw/d478ecd604f2371f2e65bea4c424b503bd4f4f98/23.Garbha.txt "
+      
+    },
+    {
+      name:"24. దేవుని కోరిక తీర్చే ",
+     file:"https://music.wixstatic.com/preview/f4beae_caaa8f52746f40279fc349b1849c6eca-128.mp3",
+      duration:"06:53",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/24.Devuni%2520Korika.txt "
+      
+    },
+    
+    {
+      name:"25. కనుమూయక ముందే ",
+     file:"https://music.wixstatic.com/preview/f4beae_275a199d93e348a4896a12dede42d6c4-128.mp3",
+      duration:"05:39",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/25.Kanumuyaka.txt "
+      
+    },
+    
+     {
+      name:"26. తండ్రియైన దేవునికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_a526dca79fa544d4b182536680517297-128.mp3",
+      duration:"07:02",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/26.Thandriyaina.txt "
+      
+    },
+    
+    {
+      name:"27. ఏదేను తోటలో ",
+     file:"https://music.wixstatic.com/preview/f4beae_57f6a3e9a1fc45ec8dc92c20d63e1a1b-128.mp3",
+      duration:"06:21",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/27.Edenu.txt "
+      
+    },
+    
+    {
+      name:"28. లోకాలనేలే మహా ",
+     file:"https://music.wixstatic.com/preview/f4beae_237b099d5786422a8419791188677a83-128.mp3",
+      duration:"06:04",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/28.Lokalanele.txt "
+      
+    },
+    {
+      name:"29. ఇది ప్రారంభ క్రైస్తవ",
+     file:"https://music.wixstatic.com/preview/f4beae_469d1f3718114da5802c4ef7e643c8f8-128.mp3",
+      duration:"05:46",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/29.Idi%2520Prarambha.txt"
+      
+    },
+    {
+      name:"30. మనిషి జన్మ ప్రారంభం ",
+     file:"https://music.wixstatic.com/preview/f4beae_40a85f39e38d45829cca45865dde4560-128.mp3",
+      duration:"05:20",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/30.Manishi%2520Janma.txt "
+      
+    },
+    {
+      name:"31. నామకార్ధ బోధకుడా ",
+     file:"https://music.wixstatic.com/preview/f4beae_988aad3d1de1488f8f00634f11f57fe2-128.mp3",
+      duration:"04:13",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/c5e30d2aad92b5c9fb813c7d77da67ce/raw/1e77b96a744cdd4daa0bfb9e76be4542b23fa4e9/31.Namakardha.txt "
+      
+    },
+    {
+      name:"32. ప్రతి మనిషికి చరిత్ర ",
+     file:"https://music.wixstatic.com/preview/f4beae_ae8da575751249fb910b2a77f4573ede-128.mp3",
+      duration:"05:21",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/32.Prathi%2520Manishiki.txt"
+      
+    },
+    {
+      name:"33. తండ్రి బాధను ",
+     file:"https://music.wixstatic.com/preview/f4beae_ab61a005164242c3aa62edffd99557cd-128.mp3",
+      duration:"06:02",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/33.Thandri%2520Badhanu.txt "
+      
+    },
+    
+    {
+      name:"34. దేవునికి భయపడని ",
+     file:"https://music.wixstatic.com/preview/f4beae_22eb94f8cd494d569c4e7188c8ad75fa-128.mp3",
+      duration:"05:15",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/34.Pralayam.txt "
+      
+    },
+    
+     {
+      name:"35. నీకిష్టమైనది కావాలి ",
+     file:"https://music.wixstatic.com/preview/f4beae_bdbd12d4105b46c594bb22d6ccc881ac-128.mp3",
+      duration:"05:34",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/35.Neekistamainadi.txt "
+      
+    },
+    
+    {
+      name:"36. జ్ఞాని ఎక్కడ? ",
+     file:"https://music.wixstatic.com/preview/f4beae_7cdd010ff43544d9b22036245cb4f70b-128.mp3",
+      duration:"05:44",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/36.Gnani%2520Ekkada.txt "
+      
+    },
+    
+    {
+      name:"37. నీ తండ్రి పని ",
+     file:"https://music.wixstatic.com/preview/f4beae_99018b22b6884306a434b088f432f11e-128.mp3",
+      duration:"04:11",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/37.Nee%2520Thandri%2520Pani.txt "
+      
+    },
+    {
+      name:"38. ఎన్నెన్నో శ్రమలను",
+     file:"https://music.wixstatic.com/preview/f4beae_110ffe1217674e21995ac88c9f84c0a1-128.mp3",
+      duration:"06:19",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/38.Ennenno%2520Sramalu.txt "
+      
+    },
+    {
+      name:"39. మనుషులలోనే ",
+     file:"https://music.wixstatic.com/preview/f4beae_986686c17bed444bbc64b7e1dc05a8bc-128.mp3",
+      duration:"04:56",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/af06607547ed36cda4c276a964b89730/raw/62a9abb4af969b765407098caf3c5630a49dbff7/39.Manushula%2520lone.txt "
+      
+    },
+    {
+      name:"40. ప్రతి మనిషికి ఇచ్చేది ",
+     file:"https://music.wixstatic.com/preview/f4beae_b1ff5c3c8a6947c6a422b6113982b15a-128.mp3",
+      duration:"05:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/40.Puraskaram.txt "
+      
+    },
+    {
+      name:"41. స్తుతి చేయుటే కాదు ",
+     file:"https://music.wixstatic.com/preview/f4beae_342ee4cbe6ac44dca4b5ef1510dcebad-128.mp3",
+      duration:"06:01",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/41.Aradhana.txt "
+      
+    },
+    {
+      name:"42. మీలో ఎవరైనా  ",
+     file:"https://music.wixstatic.com/preview/f4beae_4b3da8490dc9405588a8d3654ed88da0-128.mp3",
+      duration:"05:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/42.Meelo%2520Evaraina.txt "
+      
+    },
+    
+    {
+      name:"43. మనిషి జన్మ వింతే ",
+     file:"https://music.wixstatic.com/preview/f4beae_cc0616eff81b4cb1ace69184380d1cea-128.mp3",
+      duration:"04:15",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/43.Manishi%2520Janma%2520Vinthe.txt "
+      
+    },
+    
+     {
+      name:"44. కలిసికట్టుగుండాలి ",
+     file:"https://music.wixstatic.com/preview/f4beae_14fc60c2b98d4fec9a7420d71b836bba-128.mp3",
+      duration:"05:41",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/44.Kalisikattu.txt"
+      
+    },
+    
+    {
+      name:"45. మరణాన్ని గెలిచి ",
+     file:"https://music.wixstatic.com/preview/f4beae_01cfb613706542c4a6fc25bdbdf1cde4-128.mp3",
+      duration:"04:57",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/45.Marananni%2520Gelichi.txt "
+      
+    },
+    
+    {
+      name:"46. క్రీస్తుని ధరించినది ",
+     file:"https://music.wixstatic.com/preview/f4beae_f04d8ece118149beabe01331932bb6f6-128.mp3",
+      duration:"05:45",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/46.%2520kreesthuni%2520Dharinchina.txt "
+      
+    },
+    {
+      name:"47. ఏది సొంత ఊరు",
+     file:"https://music.wixstatic.com/preview/f4beae_5428e879d2a445b6970f09637cfeefe5-128.mp3",
+      duration:"04:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/55158de13ceaa34c491a9d8855299642/raw/444d989ade3af926077234ecdd70ecad5e142c8a/47.Edhi%2520Sontha%2520Ooru.txt"
+      
+    },
+    {
+      name:"48. మనవ బాంబులతో ",
+     file:"https://music.wixstatic.com/preview/f4beae_6b10eb9eb4a2492782a86b211fb91579-128.mp3",
+      duration:"07:20",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/c0e1d1df1576708f119e91cda62b338b37c2ef54/48.Manava%2520Bambu.txt "
+      
+    },
+     {
+      name:"49. ప్రకృతి జననానికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_722205585ab6484ab29ef217ccc9edbe-128.mp3",
+      duration:"06:22",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/c0e1d1df1576708f119e91cda62b338b37c2ef54/49.Prakruthi.txt "
+      
+    },
+    {
+      name:"50. దేవుని కష్టం మనిషికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_32f05be0d0e948f0a0a7f5c768c0dc1b-128.mp3",
+      duration:"06:46",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/c0e1d1df1576708f119e91cda62b338b37c2ef54/50.Devuni%2520Kastam.txt "
+      
+    },
+    {
+      name:"51. నీ రాకకై ఎదురు చూసే",
+     file:"https://music.wixstatic.com/preview/f4beae_149d333ddfd843c3bd469b0843cfe882-128.mp3",
+      duration:"05:56",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/c0e1d1df1576708f119e91cda62b338b37c2ef54/51.Neerakakai.txt "
+      
+    },
+    
+    {
+      name:"52. కూడు గూడు కోసం ",
+     file:"https://music.wixstatic.com/preview/f4beae_fc39bbb02147472db738a81d94023014-128.mp3",
+      duration:"04:32",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/6569383b5afbbc5f7f7470c76a97034317db2dda/52.Kudu%2520Gudu.txt "
+      
+    },
+    
+     {
+      name:"53. పరమందు ఉన్న ",
+     file:"https://music.wixstatic.com/preview/f4beae_76162a3e54fd4b93a0a23ae94d3e95ea-128.mp3",
+      duration:"06:28",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/6569383b5afbbc5f7f7470c76a97034317db2dda/53.Paramandu.txt "
+      
+    },
+    
+    {
+      name:"54. మనిషి జన్మకే విలువ ",
+     file:"https://music.wixstatic.com/preview/f4beae_384004de69ca4d66a4f35382f933c6d7-128.mp3",
+      duration:"08:43",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/eae73a666a19503952c47b429711236b/raw/6569383b5afbbc5f7f7470c76a97034317db2dda/54.Manishi%2520Janmale.txt "
+      
+    },
+    
+    {
+      name:"55. తెల్లని గుర్రములెక్కి ",
+     file:"https://music.wixstatic.com/preview/f4beae_6749f3766e5f4105a827261d6a3aeccd-128.mp3",
+      duration:"04:32",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/aee65eb4b68b0958f520786359568a99/raw/4d479c61d440563644dd215a3d61d1703798f562/55.Tellani.txt "
+      
+    },
+    {
+      name:"56. ఏ తండ్రి వ్రాయించని",
+     file:"https://music.wixstatic.com/preview/f4beae_6425976a9d8f4c9583ea69916d9e14a0-128.mp3",
+      duration:"05:22",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/aee65eb4b68b0958f520786359568a99/raw/4d479c61d440563644dd215a3d61d1703798f562/56.Ye%2520Thandri.txt "
+      
+    },
+       {
+      name:"57. ఈ భూమిపై బ్రతుకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_58420eacf03a488995d390e7a6edbb87-128.mp3",
+      duration:"05:37",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/aee65eb4b68b0958f520786359568a99/raw/4d479c61d440563644dd215a3d61d1703798f562/57.Ee%2520Bhumipai.txt "
+      
+    },
+    
+    {
+      name:"58. ఈ సృష్టి కలిగించి ",
+     file:"https://music.wixstatic.com/preview/f4beae_4b707815180c43d3aad1c86ebd9e6a4b-128.mp3",
+      duration:"05:58",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/aee65eb4b68b0958f520786359568a99/raw/4d479c61d440563644dd215a3d61d1703798f562/58.Ee%2520Srusti.txt "
+      
+    },
+    {
+      name:"59. చనిపోతే బ్రతుకుందా",
+     file:"https://music.wixstatic.com/preview/f4beae_9158434d9eb94c97bbad47ccecc1b930-128.mp3",
+      duration:"04:14",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/aee65eb4b68b0958f520786359568a99/raw/4d479c61d440563644dd215a3d61d1703798f562/59.Chanipothe.txt "
+      
+    },
+      {
+      name:"60. ఇది దేవుడు ఉన్నాడని ",
+     file:"https://music.wixstatic.com/preview/f4beae_92ca427d00e84d6e9ab3bf5647819c99-128.mp3",
+      duration:"04:57",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/60.Devudunnadu.txt "
+      
+    },
+    
+    {
+      name:"61. ఆ దేవుని మదిలో ",
+     file:"https://music.wixstatic.com/preview/f4beae_3c83bcfbad5948068961b040456ae59b-128.mp3",
+      duration:"06:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/61.A%2520Devuni%2520Madilo.txt "
+      
+    },
+    
+    {
+      name:"62. ఆ దేవుడే నీ తండ్రని ",
+     file:"https://music.wixstatic.com/preview/f4beae_2155228553244d1b89e50b0f60ad12c0-128.mp3",
+      duration:"05:37",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/62.A%2520Devude%2520Nee.txt "
+      
+    },
+    {
+      name:"63. నీవెవరైనా గాని",
+     file:"https://music.wixstatic.com/preview/f4beae_d6ca25ca59f24dc68fbdd73daa25205b-128.mp3",
+      duration:"05:34",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/63.Neevevaraina.txt "
+      
+    },
+       {
+      name:"64. ఏ పేరున పిలవాలని ",
+     file:"https://music.wixstatic.com/preview/f4beae_f9a558cedfa64f59950365d310a1d61e-128.mp3",
+      duration:"06:26",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/64.Ye%2520Peruna.txt "
+      
+    },
+    
+    {
+      name:"65. నీ గుండెలో ఆ చప్పుడే",
+     file:"https://music.wixstatic.com/preview/f4beae_77bd6be8c36b45379bb9319ce02c9b52-128.mp3",
+      duration:"04:12",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/65.Nee%2520Gundelo.txt "
+      
+    },
+    {
+      name:"66. క్రీస్తును కన్నందుకు",
+     file:"https://music.wixstatic.com/preview/f4beae_8dacb5cb077e42809fd5d6a647b3179c-128.mp3",
+      duration:"05:42",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e3fb9ec7a0f6dc7aafd954915a094f64/raw/7319886ba4cd55cb947ce2efb37350b51ac17ca9/66.Kreesthuni.txt "
+      
+    },
+    
+       {
+      name:"67. దేవుని జ్ఞాపకాలలో ",
+     file:"https://music.wixstatic.com/preview/f4beae_044ab0686ec4496c9115444327304af7-128.mp3",
+      duration:"04:53",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/67.Devuni%2520Gnapakalu.txt "
+      
+    },
+     {
+      name:"68. దేవుడు భూమిని ",
+     file:"https://music.wixstatic.com/preview/f4beae_fb11c8551f764e2084b761d806c0d5a0-128.mp3",
+      duration:"05:55",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/68.Devudu%2520Bhumini.txt "
+      
+    },
+     {
+      name:"69. నీ దేహమే ఆ ప్రభునిది ",
+     file:"https://music.wixstatic.com/preview/f4beae_7a69460fd8ea42c69cfce4f0f59b327f-128.mp3",
+      duration:"04:04",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/69.Nee%2520Dehame.txt "
+      
+    },
+     {
+      name:"70. తల్లిని తండ్రిని ",
+     file:"https://music.wixstatic.com/preview/f4beae_84937dc2e3354e8f8e8bff4e901c85f1-128.mp3",
+      duration:"05:46",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/70.Thallini.txt "
+      
+    },
+ {
+      name:"71. ఎలాంటివారు కావాలి ",
+     file:"https://music.wixstatic.com/preview/f4beae_c9e9b59148ac4c52b95f721ae9c9cd2d-128.mp3",
+      duration:"05:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/71.Elantivaru.txt "
+      
+    },
+ {
+      name:"72. తరతరములనుండి ",
+     file:"https://music.wixstatic.com/preview/f4beae_00a190cb81fc4309a9caf9e8f559e2e8-128.mp3",
+      duration:"05:21",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/72.Tharatharamula.txt "
+      
+    },
+ {
+      name:"73. మరణించిన వారే",
+     file:"https://music.wixstatic.com/preview/f4beae_303efcb8d3504ec8b05fe406f5cd0488-128.mp3",
+      duration:"06:52",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/73.Maraninchina.txt "
+      
+    },
+ {
+      name:"74. దేవుడంటే నీకిష్టమా?",
+     file:"https://music.wixstatic.com/preview/f4beae_18342d16bc1e4e12933ee76dab9ad89c-128.mp3",
+      duration:"05:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/2a3f338af203a4fe6473e10331b76dfc/raw/0d19ebea41a6b37bb31503338a5f59e28dc39f21/74.Devudante.txt "
+      
+    },
+ {
+      name:"75. బైబిల్ నే తప్పంటే ",
+     file:"https://music.wixstatic.com/preview/f4beae_fcb06b4654f74d37b1e8905650804e16-128.mp3",
+      duration:"04:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/75.Bible%2520ne.txt "
+      
+    },
+ {
+      name:"76. ఏ తల్లి తండ్రులైనా ",
+     file:"https://music.wixstatic.com/preview/f4beae_b69199705639403db96ca4a64f775f7e-128.mp3",
+      duration:"06:15",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/76.Ye%2520Thalli.txt "
+      
+    },
+ {
+      name:"77. దేవుడు కోరుకున్నది ",
+     file:"https://music.wixstatic.com/preview/f4beae_d2e8a9baf4774e5fb2431156db6fac0f-128.mp3",
+      duration:"06:38",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/77.Moshe.txt "
+      
+    },
+    
+        {
+      name:"78. యేసే లేకుంటే ",
+     file:"https://music.wixstatic.com/preview/f4beae_6e40f23b1f3d4fa38daacaed18789c2d-128.mp3",
+      duration:"04:26",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/78.Yese%2520Lekunte.txt "
+      
+    },
+     {
+      name:"79. దేవుడు ఉన్న పరలోకమే ",
+     file:"https://music.wixstatic.com/preview/f4beae_0b06fa59c5b047e79a800d76dd4e3a92-128.mp3",
+      duration:"06:36",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/79.Devudu%2520Unaa.txt "
+      
+    },
+     {
+      name:"80. పరలోకపు తండ్రి ",
+     file:"https://music.wixstatic.com/preview/f4beae_c5f2c5ec8f804fcc8662b987e9381cfb-128.mp3",
+      duration:"05:43",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/80.Paralokapu.txt"
+      
+    },
+     {
+      name:"81. దేవుడెన్ని చేసినా ",
+     file:"https://music.wixstatic.com/preview/f4beae_2ae91980e3e941f9a8ffcd14f2ae587a-128.mp3",
+      duration:"08:24",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/81.%2520Devudenni.txt "
+      
+    },
+ {
+      name:"82. లోకాలను కలిగించిన ",
+     file:"https://music.wixstatic.com/preview/f4beae_cbd4a78aab9d4f869cd49a583bf41d5c-128.mp3",
+      duration:"06:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4c75417c1965e46f6404331556bed5e9/raw/3e057814460e3be4403ece72a30f3412ebf96a21/82.Lokalanu.txt "
+      
+    },
+ {
+      name:"83. యేసుపై కుట్ర పన్నారు",
+     file:"https://music.wixstatic.com/preview/f4beae_2c2580b8af2c450bbcff7f9806d5eb43-128.mp3",
+      duration:"08:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/83.Yesupai.txt "
+      
+    },
+ {
+      name:"84. స్వర్గానికి యేసే ఆ దారి",
+     file:"https://music.wixstatic.com/preview/f4beae_273d9d19240c4e9f8899a18ec2eb46f5-128.mp3",
+      duration:"06:40",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/84.Swarganiki.txt "
+      
+    },
+ {
+      name:"85. తల్లితండ్రులు ఎందరు",
+     file:"https://music.wixstatic.com/preview/f4beae_da52a88996c046718b276543318030fb-128.mp3",
+      duration:"05:20",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/85.Thallidandrulu.txt "
+      
+    },
+ {
+      name:"86. నిజమా? నిజమా?",
+     file:"https://music.wixstatic.com/preview/f4beae_510d23299dbb4c77907484428485d61b-128.mp3",
+      duration:"06:02",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/86.Nijama.txt "
+      
+    },
+ {
+      name:"87. మీలో ఒకడు సాతానని ",
+     file:"https://music.wixstatic.com/preview/f4beae_08c650cf9c154b20ab24543c55fbb394-128.mp3",
+      duration:"05:33",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/87.%2520Meelo%2520Okadu.txt "
+      
+    },
+{
+      name:"88. నీకొక దేవుడు",
+     file:"https://music.wixstatic.com/preview/f4beae_aa7914449bd74da99c2f94bb57695d52-128.mp3",
+      duration:"05:43",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/88.Neekoka%2520Devudu.txt "
+      
+    },
+        {
+      name:"89. తండ్రి కుమార ",
+     file:"https://music.wixstatic.com/preview/f4beae_d4612ef4a2cc4501abbba6727d1d5b63-128.mp3",
+      duration:"05:36",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/89.Tnadri%2520Kumara.txt "
+      
+    },
+     {
+      name:"90. దేవుడే నిజమైన మన",
+     file:"https://music.wixstatic.com/preview/f4beae_7bc86964076642e9bb773aade0042d6d-128.mp3",
+      duration:"05:27",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/90.%2520Devude%2520Nijamaina.txt "
+      
+    },
+     {
+      name:"91. దేవాది దేవుడు ",
+     file:"https://music.wixstatic.com/preview/f4beae_7bb7d6f8c16649c486f8b273a7fea01e-128.mp3",
+      duration:"05:05",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/27564bb5b4ba6e909fecf5b8a846dc66/raw/ec4fd23a040570cbdccc19725ddf0b8788c3c245/91.Devadi%2520Devudu.txt "
+      
+    },
+     {
+      name:"92. దేవున్నే నువు  ",
+     file:"https://music.wixstatic.com/preview/f4beae_7698400818b14c879c19ca8cbc918c49-128.mp3",
+      duration:"05:29",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/92.Devunne.txt "
+      
+    },
+ {
+      name:"93. ఈ జన్మను ఇచ్చింది",
+     file:"https://music.wixstatic.com/preview/f4beae_2f8d067bed204f5fbe6fa37c1da28acd-128.mp3",
+      duration:"04:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/93.Ee%2520Janmanu.txt "
+      
+    },
+ {
+      name:"94. నేడే తెలియని నీకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_97fdadba30804754bcf64913f24f7fd0-128.mp3",
+      duration:"05:29",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/94.Nede%2520Teliyani.txt "
+      
+    },
+ {
+      name:"95. నింగి నేల నీరు",
+     file:"https://music.wixstatic.com/preview/f4beae_f370af67e6f44709b280e71c28ce4f01-128.mp3",
+      duration:"05:54",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/95.Ningi%2520Nela.txt "
+      
+    },
+ {
+      name:"96. స్వర్గాని ఇస్తాడు నీకు",
+     file:"https://music.wixstatic.com/preview/f4beae_e8428cd9a4394a7e9fc72d00a86aadda-128.mp3",
+      duration:"05:43",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/96.Swarganni.txt "
+      
+    },
+ {
+      name:"97. తన కోపమాపుకున్న ",
+     file:"https://music.wixstatic.com/preview/f4beae_a16236025c8644f39ad1aed03d8f876a-128.mp3",
+      duration:"05:28",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/97.Thanakopam.txt "
+      
+    },
+ {
+      name:"98. ప్రేమించలేదని ",
+     file:"https://music.wixstatic.com/preview/f4beae_14d60d6e96af4146adcea034549836fa-128.mp3",
+      duration:"04:41",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/98.Premincha.txt "
+      
+    },
+{
+      name:"99. భూమిని తలక్రిందులు ",
+     file:"https://music.wixstatic.com/preview/f4beae_b5da5a6cfd2c42fa98d5e83a9b359fe3-128.mp3",
+      duration:"04:33",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/99.Bhumini.txt "
+      
+    },
+        {
+      name:"100. దేవుని ఆకలి ",
+     file:"https://music.wixstatic.com/preview/f4beae_bf00ef13782643729fa3f51538e2a89d-128.mp3",
+      duration:"05:54",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/e82005d74d9635019926ee8c77b9e42f/raw/94f2792bf70098ca797dd749d4f11560e4e5b873/100.Devuni%2520Akali.txt "
+      
+    },
+     {
+      name:"101. ఈ సృష్టిని చేసినది ",
+     file:"https://music.wixstatic.com/preview/f4beae_1baa8bed901e4946b53297510d1b2c3a-128.mp3",
+      duration:"04:35",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/101.%2520Ee%2520Stustini.txt "
+      
+    },
+     {
+      name:"102. నీకోసం ఆ దేవుడే ",
+     file:"https://music.wixstatic.com/preview/f4beae_ec3b52debd2f443db7cf345c28c49e78-128.mp3",
+      duration:"05:36",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/102.Neekosam.txt "
+      
+    },
+     {
+      name:"103. నోవాహు కుటుంబమే ",
+     file:"https://music.wixstatic.com/preview/f4beae_1d435de3d4a342d1ad72e76b6e3bf4f4-128.mp3",
+      duration:"06:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/103.Novahu.txt "
+      
+    },
+ {
+      name:"104. ఆదాము హవ్వలను ",
+     file:"https://music.wixstatic.com/preview/f4beae_815da3027c1d4aa49b512b6f4018110d-128.mp3",
+      duration:"05:27",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/104.Adamu%2520Havva.txt "      
+    },
+ {
+      name:"105. పువ్వును చూస్తే ",
+     file:"https://music.wixstatic.com/preview/f4beae_2e8c428fe4574636a50f50757142ef05-128.mp3",
+      duration:"05:05",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/105.Puvvunu.txt "      
+    },
+ {
+      name:"106. దేవుని కుమారులెవరో",
+     file:"https://music.wixstatic.com/preview/f4beae_2a0130c2235d40878a45da21e1426553-128.mp3",
+      duration:"06:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/106.Devuni%2520Kumrulu.txt "      
+    },
+ {
+      name:"107. పాపానికి క్షమాపణే ",
+     file:"https://music.wixstatic.com/preview/f4beae_7f35c7a9a1ee4741ab0fece2102fc50b-128.mp3",
+      duration:"07:38",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/107.Papaniki.txt "      
+    },
+ {
+      name:"108. మరణమే మనిషి కోసం ",
+     file:"https://music.wixstatic.com/preview/f4beae_4257491eee0a4ea092a498bc2d322e3a-128.mp3",
+      duration:"03:53",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/108.Maraname.txt "      
+    },
+ {
+      name:"109. ఆరు.. ఆరు.. ఆరు..",
+     file:"https://music.wixstatic.com/preview/f4beae_82781c59ae254cbe83c30ac9a2a5d86c-128.mp3",
+      duration:"05:55",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/109.%2520666 "      
+    },
+{
+      name:"110. విశ్వానికి రారాజుగా ",
+     file:"https://music.wixstatic.com/preview/f4beae_a8cfcd1f9f26472994b53454ea3a8948-128.mp3",
+      duration:"05:16",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4f1c380dd3c23c1b3297756be40fa051/raw/b30fb4ba730968282528eb95b07786f1a19009d0/110.Viswaniki.txt "      
+    },
+        {
+      name:"111. ఆదికాండము.. ",
+     file:"https://music.wixstatic.com/preview/f4beae_e0330527af2840e3a56407a85517e381-128.mp3",
+      duration:"03:22",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/111.Adikandamu.txt"      
+    },
+     {
+      name:"112. నీలో ఉన్నది భాగమే ",
+     file:"https://music.wixstatic.com/preview/f4beae_3bde0a81996646bb916898b5028bdea9-128.mp3",
+      duration:"04:57",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/112.Neelo%2520Unndi.txt"      
+    },
+     {
+      name:"113. అమ్మను మించిన",
+     file:"https://music.wixstatic.com/preview/f4beae_3dcf184970ad4973aed3027011b82b8a-128.mp3",
+      duration:"05:52",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/113.Ammanu.txt "      
+    },
+     {
+      name:"114. దేవుడు ప్రేమతో ",
+     file:"https://music.wixstatic.com/preview/f4beae_b6e5e93c3728469794948e71c3883a0c-128.mp3",
+      duration:"05:16",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/114.Devudu%2520Prematho.txt "      
+    },
+ {
+      name:"115. దేవాది దేవుడే సైన్యంతో ",
+     file:"https://music.wixstatic.com/preview/f4beae_05bf35b2be30428aa2b21e43f473db51-128.mp3",
+      duration:"04:22",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/115.Devadi%2520Devude.txt "      
+    },
+ {
+      name:"116. రంగు రంగుల ",
+     file:"https://music.wixstatic.com/preview/f4beae_0a88a4723072408aa7ca5338e02941a6-128.mp3",
+      duration:"05:26",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/116.Rangurangula.txt "      
+    },
+ {
+      name:"117. నీ ఊపిరే నిలవాలని ",
+     file:"https://music.wixstatic.com/preview/f4beae_85b55febee3e401b9d6fad89f5fe15df-128.mp3",
+      duration:"05:07",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/117.Nee%2520Oopire.txt "      
+    },
+ {
+      name:"118. ఎదురు చూసాడు",
+     file:"https://music.wixstatic.com/preview/f4beae_8385eae6b1334b8f9a4712de2789f9da-128.mp3",
+      duration:"05:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/da8aeefe6b8b8819a4ff6f81b94e6411/raw/7a32ae670ab96b872ec18129af086963dc93570f/118.Yeduru%2520Choosadu.txt "      
+    },
+ {
+      name:"119. ప్రప్రంచ దేశాల్లారా ",
+     file:"https://music.wixstatic.com/preview/f4beae_f0d8f9a9d230438eb1264244f3234002-128.mp3",
+      duration:"06:17",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/5805fc9afcbc500dfcce03b67e8399c658c9e247/119.Prapanchadeshal.txt "      
+    },
+ {
+      name:"120. అంగ వైకల్యమున్నదని ",
+     file:"https://music.wixstatic.com/preview/f4beae_b949eac8f8324d06b6386894b3b67b03-128.mp3",
+      duration:"05:34",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/5805fc9afcbc500dfcce03b67e8399c658c9e247/120.Angavaikalyam.txt "      
+    },
+{
+      name:"121. నువు తింటున్నా ",
+     file:"https://music.wixstatic.com/preview/f4beae_92e33456cb0c4c7ca89bd35019a513b5-128.mp3",
+      duration:"05:09",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/5805fc9afcbc500dfcce03b67e8399c658c9e247/121.Nuv%2520Thintunna.txt "      
+    },
+    
+        {
+      name:"122. నిన్ను నన్ను చేసింది ",
+     file:"https://music.wixstatic.com/preview/f4beae_30986342a7724b8e80d270741cd4004f-128.mp3",
+      duration:"03:41",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/5805fc9afcbc500dfcce03b67e8399c658c9e247/122.Ninnu%2520Nannu.txt "      
+    },
+     {
+      name:"123. తల్లితండ్రి కంటే",
+     file:"https://music.wixstatic.com/preview/f4beae_659eb513fc2b44c98e340cc0107b9e30-128.mp3",
+      duration:"05:28",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/5805fc9afcbc500dfcce03b67e8399c658c9e247/123.Thallithandrikante.txt "      
+    },
+     {
+      name:"124. మహనీయులకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_b83ad6f31eda4904afb89fe91f9d623c-128.mp3",
+      duration:"04:53",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/65430c9a9e30e4fd005ba78a8ff0d2f638af5a14/124.Mahaneeyulaku.txt "      
+    },
+     {
+      name:"125. మరణిస్తే.. కనిపిస్తారు ",
+     file:"https://music.wixstatic.com/preview/f4beae_b4caedbfac3947359f64e469103b179c-128.mp3",
+      duration:"06:11",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/65430c9a9e30e4fd005ba78a8ff0d2f638af5a14/125.Maranisthe.txt "      
+    },
+ {
+      name:"126. ఎడతరగని ఎడారిలో ",
+     file:"https://music.wixstatic.com/preview/f4beae_03ea823eb6504b13b07242e642e95fc9-128.mp3",
+      duration:"09:29",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/70f3f5a73eb329790fceab4292ac2b32/raw/65430c9a9e30e4fd005ba78a8ff0d2f638af5a14/126.Yedatharagani.txt "      
+    },
+ {
+      name:"127. క్రైస్తవ్యాన్నెవరూ ",
+     file:"https://music.wixstatic.com/preview/f4beae_d332226f758d45eab68a036bb22f9232-128.mp3",
+      duration:"04:41",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/127.Kraisthvyanni.txt "      
+    },
+ {
+      name:"128. ఆ దేవుడిచ్చిన ",
+     file:"https://music.wixstatic.com/preview/f4beae_dad13e7fa380419595570a502c37dcbd-128.mp3",
+      duration:"05:24",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/128.A%2520Devudichina.txt"      
+    },
+ {
+      name:"129. వచ్చాడు అన్నయ్య ",
+     file:"https://music.wixstatic.com/preview/f4beae_42232a51a0d24c35aaa7f4de8f926cb4-128.mp3",
+      duration:"04:28",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/129.Vachadu%2520Annayya.txt "      
+    },
+ {
+      name:"130. నీ పోలికే నాకిచ్చావు ",
+     file:"https://music.wixstatic.com/preview/f4beae_d09b2b3bac0a47508f797231050bbfa1-128.mp3",
+      duration:"05:52",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/130.Nee%2520Polike.txt "      
+    },
+ {
+      name:"131. ఇలలో నీతిమంతునికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_406a064a9f394696aabc24bb8ea30d4b-128.mp3",
+      duration:"05:17",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/131.Ilalo.txt "      
+    },
+ {
+      name:"132. ఈ భువిలో పని",
+     file:"https://music.wixstatic.com/preview/f4beae_f3a9030e08b34b179a0265b75a4fc5a0-128.mp3",
+      duration:"05:34",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/132.Ee%2520Bhuvilo.txt "      
+    },
+    
+        {
+      name:"133. నిద్రించినవారే ",
+     file:"https://music.wixstatic.com/preview/f4beae_955f2b324b484be98ab40793b6e94cef-128.mp3",
+      duration:"05:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/133.Nidrinchina.txt "      
+    },
+     {
+      name:"134. దేవుడే... లేకుంటే..",
+     file:"https://music.wixstatic.com/preview/f4beae_e27443d4c8694644b61758cc2dce5747-128.mp3",
+      duration:"05:10",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/0b75565daed6a521b2ed778c7d9daf61/raw/4ac21114f1108d6076d99f7ba9507d52c815e5f6/134.Devude%2520Lekunte.txt "      
+    },
+     {
+      name:"135. ఆ దేవుడే నిను ",
+     file:"https://music.wixstatic.com/preview/f4beae_db50d23fc6524095901469bd304a2de3-128.mp3",
+      duration:"05:01",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/135.A%2520Devude%2520Ninu.txt "
+    },
+     {
+      name:"136. వేలిముద్ర నీకుందని ",
+     file:"https://music.wixstatic.com/preview/f4beae_5af5e2f280684e6f8595ca940b518aa9-128.mp3",
+      duration:"05:11",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/136.Velimudra.txt"
+    },
+ {
+      name:"137. జీవరాశుల బ్రతుకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_48b299754e7a4a2bbc8db281445e3ad0-128.mp3",
+      duration:"04:56",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/137.Jeevarasula.txt "
+    },
+ {
+      name:"138. గూగుల్ చెప్పలేని ",
+     file:"https://music.wixstatic.com/preview/f4beae_a6ab4b8185cc4b3f9476dad58d2ac88a-128.mp3",
+      duration:"05:20" ,
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/138.Google%2520Cheppaleni.txt "
+    },
+ {
+      name:"139. రొట్టె ద్రాక్షారసము ",
+     file:"https://music.wixstatic.com/preview/f4beae_34cfd0166a9e41d7af71bc8dd5f3a654-128.mp3",
+      duration:"05:59",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/139.Rotte.txt "      
+    },
+ {
+      name:"140. యెహోవాకు నువు ",
+     file:"https://music.wixstatic.com/preview/f4beae_212c15068e78439e9c1e1fb66cee476b-128.mp3",
+      duration:"04:32",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/140.Yehovaku.txt "      
+    },
+ {
+      name:"141. దేవుని సేవకునికి ",
+     file:"https://music.wixstatic.com/preview/f4beae_561ae7582a754df7ac41293a062b0101-128.mp3",
+      duration:"05:19",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/141.Devuni%2520Sevakuniki.txt "      
+    },
+ {
+      name:"142. అబ్బాయైతే అమ్మ",
+     file:"https://music.wixstatic.com/preview/f4beae_46152cb70eba418ca8601be28b4214f1-128.mp3",
+      duration:"05:59",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/142.Abbayaithe.txt "      
+    },
+{
+      name:"143. ఏది నీది కాదు ",
+     file:"https://music.wixstatic.com/preview/f4beae_da1328f3571a404ab9ccd739ac3d1e74-128.mp3",
+      duration:"05:20",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/143.Yedi%2520Needi.txt "      
+    },
+     {
+      name:"144. మనుషుల ఎదుట",
+     file:"https://music.wixstatic.com/preview/f4beae_563b50c5d2ca4b65ac18fdbba9e8a045-128.mp3",
+      duration:"04:37",
+      lyricsUrl: " https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/144.Manushula%2520Yeduta.txt"      
+    },
+ {
+      name:"145. ఆదిలో అందరం ",
+     file:"https://music.wixstatic.com/preview/f4beae_0e92885c0ed345d98f73cbb69a6ef961-128.mp3",
+      duration:"06:03",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/145.Adilo%2520Andaram.txt "      
+    },
+ {
+      name:"146. జంతువులకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_4c7993ee755a45c78626e06fa39f434e-128.mp3",
+      duration:"03:52",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/146.Janthuvulaku.txt "      
+    },
+    
+        {
+      name:"147. పరిశుద్దాత్మ దేవుడే ",
+     file:"https://music.wixstatic.com/preview/f4beae_0acac1cd678b43f3aa00fed8ec0a75b0-128.mp3",
+      duration:"06:19",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/147.Parishudatma.txt "      
+    },
+     {
+      name:"148. క్రైస్తవులను హతమార్చ ",
+     file:"https://music.wixstatic.com/preview/f4beae_81f2117f260c4e18933e6df06a78ccb1-128.mp3",
+      duration:"04:29",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/148.Kraistavulanu.txt "      
+    },
+	{
+      name:"149. బలిదానం నీ ప్రాణం",
+     file:"https://music.wixstatic.com/preview/f4beae_12c53fc5e34440a692b6475a5d39753e-128.mp3",
+      duration:"08:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/149.Balidanam.txt "      
+    },
+     {
+      name:"150. నీ కోసమే నా దీర్ఘ ",
+     file:"https://music.wixstatic.com/preview/f4beae_e423f62b24734729ab212de0e88e2ec0-128.mp3",
+      duration:"06:21",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/80f216a0f348ba575d7d8a05bba928c6/raw/41e2c9177f08c2ae9828b7e7f8145daf1812b360/150.Neekosame.txt "      
+    },
+     {
+      name:"151. సంగీతమంటే మూలం ",
+     file:"https://music.wixstatic.com/preview/f4beae_720984f00ac94f04bd6bdddb53a6409f-128.mp3",
+      duration:"07:55",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/151.Sangeetam.txt "      
+    },
+ {
+      name:"152. అమ్మ కడుపులో ",
+     file:"https://music.wixstatic.com/preview/f4beae_20929a4cf3514c84be226e331529cdd8-128.mp3",
+      duration:"04:54",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/152.Amma%2520Kadupulo.txt "      
+    },
+ {
+      name:"153. నీదేలే దేవుని రూపం ",
+     file:"https://music.wixstatic.com/preview/f4beae_3bd2aedef22f421c8677c5a29c9c6030-128.mp3",
+      duration:"06:36",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/153.Needele.txt "      
+    },
+ {
+      name:"154. ఈ ఇద్దరినీ జత ",
+     file:"https://music.wixstatic.com/preview/f4beae_80bb33ac9f084f9097b4c4f2ec662ece-128.mp3",
+      duration:"05:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/154.Ee%2520Iddarini.txt "      
+    },
+ {
+      name:"155. నీతిమంతులే ",
+     file:"https://music.wixstatic.com/preview/f4beae_ce2e44c4b75b4b28aafb063d28807672-128.mp3",
+      duration:"05:05",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/155.Neethimanthule.txt "      
+    },
+ {
+      name:"156. ఆ దేవుడు కోరినది ",
+     file:"https://music.wixstatic.com/preview/f4beae_fdc81948627c4b188f361d30acb0a5ff-128.mp3",
+      duration:"05:16",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/156.Aa%2520Devudu.txt "      
+    },
+ {
+      name:"157. వచ్చాడు... వచ్చాడు...",
+     file:"https://music.wixstatic.com/preview/f4beae_fd7f2a08e4b8485cb7554616abd30a44-128.mp3",
+      duration:"04:55",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/157.Vachadu.txt "      
+    },
+{
+      name:"158. దేవుని నుండి ఈ ",
+     file:"https://music.wixstatic.com/preview/f4beae_295bf826ec794f74ae479bc52f55772d-128.mp3",
+      duration:"05:34",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/158.Devuni%2520nundi.txt "      
+    },
+     {
+      name:"159. దేవునికై బ్రతకక ",
+     file:"https://music.wixstatic.com/preview/f4beae_a44cde6c067e4b4b92abf41420b16e1f-128.mp3",
+      duration:"04:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/159.Devunikai.txt "      
+    },
+ {
+      name:"160. తామారు జీవితము ",
+     file:"https://music.wixstatic.com/preview/f4beae_4b8f9f66b8174f82bab0425c03a54a78-128.mp3",
+      duration:"05:01",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/160.Thamaru.txt "      
+    },
+ {
+      name:"161. మలినపు నీటిలో ",
+     file:"https://music.wixstatic.com/preview/f4beae_11eb2b6152b140cd915b5026c339c8da-128.mp3",
+      duration:"05:31",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/161.Uppuchepa.txt "      
+    },
+    
+        {
+      name:"162. నీ కనులెదుటే ",
+     file:"https://music.wixstatic.com/preview/f4beae_93d59ac53a5b48ebb1baceb35a7e3ffc-128.mp3",
+      duration:"06:22",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/4cadd3e3108129d751be3ffa9417ab2e/raw/aca59235a146dc9d4703b8ebfca2e06584dc6148/162.Nee%2520Kanuledute.txt "      
+    },
+     {
+      name:"163. తెలవారక ముందే ",
+     file:"https://music.wixstatic.com/preview/f4beae_5a73a7c1ec0f4bf5a07049767a9e85ec-128.mp3",
+      duration:"05:44",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/163.Telavaraka.txt "      
+    },
+     {
+      name:"164. చెట్టుమీద నుండి ",
+     file:"https://music.wixstatic.com/preview/f4beae_f870ef5e4dff40c8b479d6826c97be1d-128.mp3",
+      duration:"05:23",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/164.Akarshana.txt "      
+    },
+     {
+      name:"165. ఆ దేవుడు లేడని ",
+     file:"https://music.wixstatic.com/preview/f4beae_1e31594a440347058cdd8dee79805c3b-128.mp3",
+      duration:"03:59",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/165.A%2520Devudu%2520Ledani.txt "      
+    },
+ {
+      name:"166. తల్లియైనా తండ్రియైనా ",
+     file:"https://music.wixstatic.com/preview/f4beae_0afe29e806aa426aa67cd8f9e85cdfe2-128.mp3",
+      duration:"06:00",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/166.Thalliyaina.txt "      
+    },
+ {
+      name:"167. చదువుకొనని యేసుకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_399094f2958d4b97a2ccdad66dcf3248-128.mp3",
+      duration:"04:50",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/167.Chaduvukonani.txt "      
+    },
+ {
+      name:"168. మనిషి జన్మ ఒకసారే ",
+     file:"https://music.wixstatic.com/preview/f4beae_1ada4b52d8aa437a89cde3b1fcb40a30-128.mp3",
+      duration:"06:08",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/168.Manishi%2520janma%2520Okasare.txt "      
+    },
+ {
+      name:"169. స్త్రీ ముసుగు వేసుకొని ",
+     file:"https://music.wixstatic.com/preview/f4beae_c9aaa3a52c1a4c26a1211c960cad143d-128.mp3",
+      duration:"06:28",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/169.Stree%2520Musugu.txt "      
+    },
+ {
+      name:"170. పాపాన్ని చేసావు కోరి ",
+     file:"https://music.wixstatic.com/preview/f4beae_445f89a9a0e5420eb0432502d8b290ef-128.mp3",
+      duration:"05:18",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/bd747ef70991c9bd47e55e4305bb9a5e/raw/17edc4dcf44e22d8966871bfde31dfa290272d13/170.Papanni.txt "      
+    },
+ 
+{
+      name:"171. డెబ్బై ఎనభై తొంభై ",
+     file:"https://music.wixstatic.com/preview/f4beae_7042884229704f3b9cc66a631881db83-128.mp3",
+      duration:"05:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/171.Debbai.txt "      
+    },
+     {
+      name:"171. డెబ్బై ఎనభై (PDSR)",
+     file:"https://music.wixstatic.com/preview/f4beae_4044a5f21c34459dae6a94f3730adb59-128.mp3",
+      duration:"05:46",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/171.Debbai.txt "      
+    },
+ {
+      name:"172. గొంతిచ్చాడని",
+     file:"https://music.wixstatic.com/preview/f4beae_cd24b10610594b10b0e8fffdba33da49-128.mp3",
+      duration:"05:43",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/172.Gonthicchadani.txt "      
+    },
+ {
+      name:"173. పరలోకంలో నీ ",
+     file:"https://music.wixstatic.com/preview/f4beae_e2334c2d081646f1860def99217c4413-128.mp3",
+      duration:"05:29",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/173.Paralokamlo.txt" 
+      
+    },
+    
+        {
+      name:"174. ఎంతో కష్టంగా ఉందా ",
+     file:"https://music.wixstatic.com/preview/f4beae_d0461a331be444339ee82a50695e6704-128.mp3",
+      duration:"05:40",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/174.Entho%2520Kastanga.txt" 
+      
+    },
+     {
+      name:"175. నువ్వు పుట్టాకే",
+     file:"https://music.wixstatic.com/preview/f4beae_c18f3b64172f4918b2619d6b342ba828-128.mp3",
+      duration:"06:01",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/175.Nuv%2520Outtake.txt" 
+      
+    },
+     {
+      name:"176. స్త్రీ పురుషులనే",
+     file:"https://music.wixstatic.com/preview/f4beae_1011e37db5b94cd4b33fd119025f4ef0-128.mp3",
+      duration:"05:18",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/9d5060797f29d31ed36eb94044ab7b59/raw/bd2675b3db4dbfef014941215a59e1f1ca4c7431/176.Stree%2520Purushulane.txt" 
+      
+    },
+    {
+      name:"177. దేవుని కాల రహస్యం",
+     file:"https://music.wixstatic.com/preview/f4beae_429a2af1ab9d4479ac8a8a791b1dfef6-128.mp3",
+      duration:"01:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/177.%2520Devuni%2520kala%2520rahasyam.txt" 
+      
+    },
+   
+     {
+      name:"178. వెయ్యేండ్లొక యుగమైనా",
+     file:"https://music.wixstatic.com/preview/f4beae_21a2d7eebe50499aa2f35424590682b5-128.mp3",
+      duration:"04:59",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/178.Veyyendlu.txt" 
+      
+    },
+ {
+      name:"179. తల్లితండ్రులెవరైనా",
+     file:"https://music.wixstatic.com/preview/f4beae_ac12e1a0828e4a0c9c91dffeac0d97d5-128.mp3",
+      duration:"05:05",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/179.Thallithandrulevaraina.txt" 
+      
+    },
+ {
+      name:"180. శ్రీమంతుడైన",
+     file:"https://music.wixstatic.com/preview/f4beae_dce18b4356864e92889faf2b49bf4dd3-128.mp3",
+      duration:"04:48",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/180.Srimanthudaina.txt" 
+      
+    },
+ {
+      name:"181. దైవ యిష్టమే",
+     file:"https://music.wixstatic.com/preview/f4beae_db6570c2ff0b49f28556cb6f1bb00cf5-128.mp3",
+      duration:"04:57",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/181.Daiva%2520Istame.txt" 
+      
+    },
+ {
+      name:"182. తల్లితండ్రిని దేవుడు ",
+     file:"https://music.wixstatic.com/preview/f4beae_4aa4ac89cd654695b0336fa5b870c9dd-128.mp3",
+      duration:"06:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/182.Thalli%2520Thandrini.txt" 
+      
+    },
+ {
+      name:"183. దిగజారింది ఈ లోకం",
+     file:"https://music.wixstatic.com/preview/f4beae_412003c1848b4b1db9fa21e16c791985-128.mp3",
+      duration:"03:54",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/183.Digajarindi.txt" 
+      
+    },
+ {
+      name:"184. అడుగులు వేస్తూ",
+     file:"https://music.wixstatic.com/preview/f4beae_0ec83b261e1542068cd3ca27ce08ebe0-128.mp3",
+      duration:"04:01",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/184.Adugulu.txt" 
+      
+    },
+{
+      name:"185. వినరే నరులారా ",
+     file:"https://music.wixstatic.com/preview/f4beae_45bb1b8175ea4e2390c8c4a492495cfa-128.mp3",
+      duration:"05:33",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/185.Vinare.txt" 
+      
+    }
+	,
+{
+      name:"186. యేసు రక్తమే ",
+     file:"https://music.wixstatic.com/preview/f4beae_222d4c22d4e240008c52c7ebee501f47-128.mp3",
+      duration:"07:05",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/94a6959bf6a0699e90cb169b65553d08/raw/ad8ad541271ab99ef784d1610ea7d5bcc8cad2dd/186.Yesuraktame.txt" 
+      
+    },
+ {
+      name:"187. కథ కాదిది నిజమే ఇది ",
+     file:"https://music.wixstatic.com/preview/f4beae_4e61c8a2e157446eb1231838aad0583e-128.mp3",
+      duration:"07:26",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/187.Katha%2520Kadhidhi.txt" 
+      
+    },
+ {
+      name:"188. నీ ఊపిరే తన వశం ",
+     file:"https://music.wixstatic.com/preview/f4beae_caa2f921ae1b4211a35173f555a5b568-128.mp3",
+      duration:"05:11",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/188.Nee%2520Oopire.txt" 
+      
+    },
+ {
+      name:"189. సిలువపై దొంగ ",
+     file:"https://music.wixstatic.com/preview/f4beae_c34e08b59a264170835cc1a209a1398f-128.mp3",
+      duration:"06:44",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/189.Siluvapai.txt" 
+      
+    },
+{
+      name:"190. ప్రతి శిశువుకి తల్లి ",
+     file:"https://music.wixstatic.com/preview/f4beae_1522205fd362496c82547f7fc239321c-128.mp3",
+      duration:"06:42",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/190.Prathi%2520Sishuvu.txt" 
+      
+    },
+     {
+      name:"191. నిజమైన భక్తేదో  ",
+     file:"https://music.wixstatic.com/preview/f4beae_a9e7c7879a4647d3a6e94f0fef6632a3-128.mp3",
+      duration:"06:37",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/191.Nijamaina.txt" 
+      
+    },
+ {
+      name:"192. దేవా ఓ దేవా ",
+     file:"https://music.wixstatic.com/preview/f4beae_f357f932104f442da53cd57bae7d9348-128.mp3",
+      duration:"04:58",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/192.Deva%2520O%2520Deva.txt" 
+      
+    },
+ {
+      name:"193. బాలుడు నడువ ",
+     file:"https://music.wixstatic.com/preview/f4beae_4b57604e9a984433aca1067f923784bc-128.mp3",
+      duration:"04:56",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/192.Baludu.txt" 
+      
+    },
+    
+        {
+      name:"194. ఎందుకు ఎందుకు ",
+     file:"https://music.wixstatic.com/preview/f4beae_c9cc281a9c0e47a99113128c0cef4149-128.mp3",
+      duration:"05:38",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/193.Enduku.txt" 
+      
+    },
+     {
+      name:"195. సర్వోన్నతమైనది ",
+     file:"https://music.wixstatic.com/preview/f4beae_68945549ffd64dd28d12c8e57b9a0095-128.mp3",
+      duration:"04:51",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/194.Sarvonnatha.txt" 
+      
+    },
+     {
+      name:"196. మనుషుల మెప్పును ",
+     file:"https://music.wixstatic.com/preview/f4beae_ffd800da70444840bf3e714a78f9ea49-128.mp3",
+      duration:"05:21",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/195.Manushula.txt" 
+      
+    },
+     {
+      name:"197. దేవుని కొరకు పుట్టాడు ",
+     file:"https://music.wixstatic.com/preview/f4beae_c0be14947e6c45fd8adebcdf0adaecd3-128.mp3",
+      duration:"04:06",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/196.Devinikoraku.txt" 
+      
+    },
+ {
+      name:"198. దినములు గడుచు",
+     file:"https://music.wixstatic.com/preview/f4beae_64786cfd67c74d45aea93a1a45161d9f-128.mp3",
+      duration:"04:35",
+      lyricsUrl: "https://gist.githubusercontent.com/Rajatalluri91/1892c39d053acbeb892e005e35812a4f/raw/a14e56f2bd75a29c5806468df0d109b435491669/197.Dinamulu.txt" 
+      
+    }
+]
+
+
+  for (var i = 0; i < listAudio.length; i++) {
+      createTrackItem(i,listAudio[i].name,listAudio[i].duration);
+  }
+  var indexAudio = 0;
+
+  function loadNewTrack(index){
+    var player = document.querySelector('#source-audio')
+    player.src = listAudio[index].file
+    document.querySelector('.title').innerHTML = listAudio[index].name
+    this.currentAudio = document.getElementById("myAudio");
+    this.currentAudio.load()
+    this.toggleAudio()
+    this.updateStylePlaylist(this.indexAudio,index)
+    this.indexAudio = index;
+  }
+
+  var playListItems = document.querySelectorAll(".playlist-track-ctn");
+
+  for (let i = 0; i < playListItems.length; i++){
+    playListItems[i].addEventListener("click", getClickedElement.bind(this));
+  }
+
+  function getClickedElement(event) {
+    for (let i = 0; i < playListItems.length; i++){
+      if(playListItems[i] == event.target){
+        var clickedIndex = event.target.getAttribute("data-index")
+        if (clickedIndex == this.indexAudio ) { // alert('Same audio');
+            this.toggleAudio()
+        }else{
+            loadNewTrack(clickedIndex);
+        }
+      }
+    }
+  }
+
+  document.querySelector('#source-audio').src = listAudio[indexAudio].file
+  document.querySelector('.title').innerHTML = listAudio[indexAudio].name
+
+
+  var currentAudio = document.getElementById("myAudio");
+
+  currentAudio.load()
+  
+  currentAudio.onloadedmetadata = function() {
+        document.getElementsByClassName('duration')[0].innerHTML = this.getMinutes(this.currentAudio.duration)
+  }.bind(this);
+
+  var interval1;
+
+  function toggleAudio() {
+
+    if (this.currentAudio.paused) {
+      document.querySelector('#icon-play').style.display = 'none';
+      document.querySelector('#icon-pause').style.display = 'block';
+      document.querySelector('#ptc-'+this.indexAudio).classList.add("active-track");
+      this.playToPause(this.indexAudio)
+      this.currentAudio.play();
+    }else{
+      document.querySelector('#icon-play').style.display = 'block';
+      document.querySelector('#icon-pause').style.display = 'none';
+      this.pauseToPlay(this.indexAudio)
+      this.currentAudio.pause();
+    }
+  }
+
+  function pauseAudio() {
+    this.currentAudio.pause();
+    clearInterval(interval1);
+  }
+
+  var timer = document.getElementsByClassName('timer')[0]
+
+  var barProgress = document.getElementById("myBar");
+
+
+  var width = 0;
+
+  function onTimeUpdate() {
+    var t = this.currentAudio.currentTime
+    timer.innerHTML = this.getMinutes(t);
+    this.setBarProgress();
+    if (this.currentAudio.ended) {
+      document.querySelector('#icon-play').style.display = 'block';
+      document.querySelector('#icon-pause').style.display = 'none';
+      this.pauseToPlay(this.indexAudio)
+      if (this.indexAudio < listAudio.length-1) {
+          var index = parseInt(this.indexAudio)+1
+          this.loadNewTrack(index)
+      }
+    }
+  }
+
+
+  function setBarProgress(){
+    var progress = (this.currentAudio.currentTime/this.currentAudio.duration)*100;
+    document.getElementById("myBar").style.width = progress + "%";
+  }
+
+
+  function getMinutes(t){
+    var min = parseInt(parseInt(t)/60);
+    var sec = parseInt(t%60);
+    if (sec < 10) {
+      sec = "0"+sec
+    }
+    if (min < 10) {
+      min = "0"+min
+    }
+    return min+":"+sec
+  }
+
+  var progressbar = document.querySelector('#myProgress')
+  progressbar.addEventListener("click", seek.bind(this));
+
+
+  function seek(event) {
+    var percent = event.offsetX / progressbar.offsetWidth;
+    this.currentAudio.currentTime = percent * this.currentAudio.duration;
+    barProgress.style.width = percent*100 + "%";
+  }
+
+  function forward(){
+    this.currentAudio.currentTime = this.currentAudio.currentTime + 5
+    this.setBarProgress();
+  }
+
+  function rewind(){
+    this.currentAudio.currentTime = this.currentAudio.currentTime - 5
+    this.setBarProgress();
+  }
+
+
+  function next(){
+    if (this.indexAudio <listAudio.length-1) {
+        var oldIndex = this.indexAudio
+        this.indexAudio++;
+        updateStylePlaylist(oldIndex,this.indexAudio)
+        this.loadNewTrack(this.indexAudio);
+    }
+  }
+
+  function previous(){
+    if (this.indexAudio>0) {
+        var oldIndex = this.indexAudio
+        this.indexAudio--;
+        updateStylePlaylist(oldIndex,this.indexAudio)
+        this.loadNewTrack(this.indexAudio);
+    }
+  }
+
+  function updateStylePlaylist(oldIndex,newIndex){
+    document.querySelector('#ptc-'+oldIndex).classList.remove("active-track");
+    this.pauseToPlay(oldIndex);
+    document.querySelector('#ptc-'+newIndex).classList.add("active-track");
+    this.playToPause(newIndex)
+  }
+
+  function playToPause(index){
+    var ele = document.querySelector('#p-img-'+index)
+    ele.classList.remove("fa-play");
+    ele.classList.add("fa-pause");
+  }
+
+  function pauseToPlay(index){
+    var ele = document.querySelector('#p-img-'+index)
+    ele.classList.remove("fa-pause");
+    ele.classList.add("fa-play");
+  }
+
+
+  function toggleMute(){
+    var btnMute = document.querySelector('#toggleMute');
+    var volUp = document.querySelector('#icon-vol-up');
+    var volMute = document.querySelector('#icon-vol-mute');
+    if (this.currentAudio.muted == false) {
+       this.currentAudio.muted = true
+       volUp.style.display = "none"
+       volMute.style.display = "block"
+    }else{
+      this.currentAudio.muted = false
+      volMute.style.display = "none"
+      volUp.style.display = "block"
+    }
+  }
+  
+  
+
+</script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(function() { console.log('SW registered'); });
+  }
+</script>
+
+<script>
+function cacheThisSong(songUrl, lyricsUrl) {
+  if (!('caches' in window)) {
+    alert("❌ Caching not supported in this browser.");
+    return;
+  }
+  caches.open('boui-v1').then(cache => {
+    cache.add(songUrl).then(() => {
+      if (lyricsUrl) {
+        cache.add(lyricsUrl).then(() => {
+          alert("✔ Cached song & lyrics for offline use!");
+        }).catch(() => alert("⚠️ Song cached, but lyrics failed."));
+      } else {
+        alert("✔ Cached song for offline use!");
+      }
+    }).catch(() => {
+      alert("❌ Failed to cache song.");
+    });
+  });
+}
+</script>
+
+
+</body>
+</html>
